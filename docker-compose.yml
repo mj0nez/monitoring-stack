@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  grafana:
+    image: grafana/grafana-oss:latest
+    ports:
+      - 3000:3000
+  timescaledb:
+    image: timescale/timescaledb-ha:pg14.6-ts2.9.2-latest
+    environment:
+      - POSTGRES_PASSWORD=password    # required, otherwise timescale disable password check for all dbs 
+    ports:
+      - 5431:5432
+    volumes: 
+      - timescale:/home/postgres/pgdata/data
+volumes:
+  timescale:
+networks:
+  default:
+    name: prefect-network
