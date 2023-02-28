@@ -2,10 +2,28 @@ version: "3.9"
 services:
   grafana:
     image: grafana/grafana-oss:latest
+    environment:
+      - GF_DATABASE_TYPE=postgres
+      - GF_DATABASE_HOST=grafana-db:5432
+      - GF_DATABASE_NAME=grafana
+      - GF_DATABASE_USER=grafana
+      - GF_DATABASE_PASSWORD=postgres
+      - GF_DATABASE_SSL_MODE=disable
     ports:
       - 3000:3000
     volumes:
       - grafana-storage:/var/lib/grafana
+  grafana-db:
+    image: postgres:15.1-alpine
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=grafana
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=grafana
+    ports:
+      - 5433:5432
+    volumes: 
+      - grafana-postgres:/var/lib/postgresql/data
   timescaledb:
     image: timescale/timescaledb-ha:pg14.6-ts2.9.2-latest
     environment:
@@ -16,6 +34,7 @@ services:
       - timescale:/home/postgres/pgdata/data
 volumes:
   grafana-storage:
+  grafana-postgres:
   timescale:
 networks:
   default:
