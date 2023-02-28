@@ -4,6 +4,8 @@ services:
     image: grafana/grafana-oss:latest
     ports:
       - 3000:3000
+    volumes:
+      - grafana-storage:/var/lib/grafana
   timescaledb:
     image: timescale/timescaledb-ha:pg14.6-ts2.9.2-latest
     environment:
@@ -13,6 +15,7 @@ services:
     volumes: 
       - timescale:/home/postgres/pgdata/data
 volumes:
+  grafana-storage:
   timescale:
 networks:
   default:
