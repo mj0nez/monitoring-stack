@@ -1,3 +1,7 @@
+## NOTE: 
+# Passwords and other sensitive data belongs into an .env file.
+# see https://docs.docker.com/compose/environment-variables/set-environment-variables/ 
+
 version: "3.9"
 services:
   grafana:
