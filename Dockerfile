@@ -1,5 +1,5 @@
 # Grafana recommends an alpine based image.
-# Reference of updating the CA-certificates of an alpine image see https://stackoverflow.com/q/67231714
+# Reference for updating the CA-certificates of an alpine image see https://stackoverflow.com/q/67231714
 
 FROM grafana/grafana-oss:latest
 
