@@ -1,4 +1,4 @@
-# Grafana Documentation
+# Proof of Concept for a Monitoring Application Stack
 
 ## Custom Grafana image
 
@@ -7,10 +7,10 @@ For a setup behind a company proxy grafana requires additional certificates.
 **Requirements:**
 
 - a certificate (.crt/.pem)  or a certificate bundle (.pem)
-- adjust the certificates path in [Dockerfile](Dockerfile)
-- build the custom image
+- build the custom image by providing the certificate as build argument:
 
 > **Warning**
+>
 > Uploading a custom image to a public registry exposes your private certificates!
 
 ```bash
