@@ -26,6 +26,18 @@ services:
   #   #   - "1514:1514" # this is only needed if you are going to send syslogs
   #   restart: unless-stopped
   #   command: -config.file=/etc/promtail/promtail-config.yml
+  prometheus:
+    image: prom/prometheus
+    # volumes:
+    #   - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://localhost:3100/loki/api/v1/push"
+        loki-batch-size: "400"
 networks:
   default:
     name: prefect-network
