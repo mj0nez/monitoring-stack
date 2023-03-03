@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   loki:
-      image: grafana/loki:2.4.0
+      image: grafana/loki:2.7.4
       volumes:
         - ./loki:/etc/loki
       ports:
@@ -9,7 +9,7 @@ services:
       restart: unless-stopped
       command: -config.file=/etc/loki/loki-config.yml
   promtail:
-      image: grafana/promtail:2.4.0
+      image: grafana/promtail:2.7.4
       volumes:
         - /var/log:/var/log
         - ./promtail:/etc/promtail
