@@ -1,0 +1,70 @@
+version: "3.9"
+
+networks:
+  default:
+    name: prefect-network
+
+services:
+
+  loki:
+    image: grafana/loki:2.7.4
+    volumes:
+      - ./loki:/etc/loki
+    ports:
+      - "3100:3100"
+    restart: unless-stopped
+    command: -config.file=/etc/loki/loki-config.yml
+    # logging:
+    #   driver: loki
+    #   options:
+    #     loki-url: "http://localhost:3100/loki/api/v1/push"
+    #     loki-batch-size: "400"
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    ports:
+    - 8080:8080
+    volumes:
+    - /:/rootfs:ro
+    - /var/run:/var/run:rw
+    - /sys:/sys:ro
+    - /var/lib/docker/:/var/lib/docker:ro
+    depends_on:
+      - loki
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://localhost:3100/loki/api/v1/push"
+        loki-batch-size: "400"
+
+  prometheus:
+    image: prom/prometheus
+    volumes:
+    - ./prometheus/prometheus-config.yml:/etc/prometheus/prometheus.yml:ro
+    command:
+    - --config.file=/etc/prometheus/prometheus.yml
+    depends_on:
+    - cadvisor
+    - loki
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://localhost:3100/loki/api/v1/push"
+        loki-batch-size: "400"
+
+  ## in the current setup promtail has no task 
+  ## additionaly it fails because the by the config defined path does not exist
+  #
+  # promtail:
+  #   image: grafana/promtail:2.7.4
+  #   volumes:
+  #     - /var/log:/var/log
+  #     - ./promtail:/etc/promtail
+  #   # ports:
+  #   #   - "1514:1514" # this is only needed if you are going to send syslogs
+  #   restart: unless-stopped
+  #   command: -config.file=/etc/promtail/promtail-config.yml
+  
