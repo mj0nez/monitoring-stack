@@ -11,7 +11,7 @@ volumes:
 
 networks:
   default:
-    name: prefect-network
+    name: monitoring-network
 
 services:
   grafana:
@@ -54,7 +54,7 @@ services:
         loki-batch-size: "400"
 
   timescaledb:
-    image: timescale/timescaledb-ha:pg14.6-ts2.9.2-latest
+    image: timescale/timescaledb:latest-pg15
     environment:
       - POSTGRES_PASSWORD=password    # required, otherwise timescale disable password check for all dbs 
     ports:
