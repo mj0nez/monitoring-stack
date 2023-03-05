@@ -42,3 +42,9 @@ scrape_configs:
     scheme: http
     static_configs:
     - targets: [minio:9000]
+
+  - job_name: grafana
+    scrape_interval: 20s 
+    static_configs:
+    - targets:
+      - grafana:3000
