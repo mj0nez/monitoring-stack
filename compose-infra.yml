@@ -2,10 +2,48 @@ version: "3.9"
 
 networks:
   default:
-    name: prefect-network
+    name: monitoring-network
+
+volumes:
+  minio:
 
 services:
-
+  minio:
+    image: minio/minio
+    entrypoint:
+      - sh
+      - -euc
+      - |
+        mkdir -p /data/loki-data && \
+        mkdir -p /data/loki-ruler && \
+        minio server --address 0.0.0.0:9000 --console-address 0.0.0.0:9001 /data
+    environment:
+      # the default
+      - MINIO_ROOT_USER=loki
+      - MINIO_ROOT_PASSWORD=supersecret
+      - MINIO_PROMETHEUS_AUTH_TYPE=public
+    ports:
+      - 9004:9000
+      - 9006:9001
+    volumes:
+      - minio:/data
+    # healthcheck:
+    #   test: [ "CMD", "curl", "-f", "http://localhost:9000/minio/health/live" ]
+    #   interval: 15s
+    #   timeout: 20s
+    #   retries: 5
+  # minmc:
+  #   image: minio/mc
+  #   depends_on:
+  #     - minio
+  #   entrypoint: >
+  #     /bin/sh -c "
+  #     /usr/bin/mc config host add myminio http://minio:9000 minioadmin minioadmin;
+  #     /usr/bin/mc rm -r --force myminio/loki;
+  #     /usr/bin/mc mb myminio/loki;
+  #     /usr/bin/mc policy set public myminio/loki;
+  #     exit 0;
+  #     "
   loki:
     image: grafana/loki:2.7.4
     volumes:
@@ -14,11 +52,8 @@ services:
       - "3100:3100"
     restart: unless-stopped
     command: -config.file=/etc/loki/loki-config.yml
-    # logging:
-    #   driver: loki
-    #   options:
-    #     loki-url: "http://localhost:3100/loki/api/v1/push"
-    #     loki-batch-size: "400"
+    depends_on:
+      - minio
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
@@ -29,13 +64,7 @@ services:
     - /var/run:/var/run:rw
     - /sys:/sys:ro
     - /var/lib/docker/:/var/lib/docker:ro
-    depends_on:
-      - loki
-    logging:
-      driver: loki
-      options:
-        loki-url: "http://localhost:3100/loki/api/v1/push"
-        loki-batch-size: "400"
+
 
   prometheus:
     image: prom/prometheus
@@ -67,4 +96,3 @@ services:
   #   #   - "1514:1514" # this is only needed if you are going to send syslogs
   #   restart: unless-stopped
   #   command: -config.file=/etc/promtail/promtail-config.yml
-  
