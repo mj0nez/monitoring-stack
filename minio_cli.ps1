@@ -1,0 +1,1 @@
+docker compose -f compose-loki-minio.yaml run --rm minmc
