@@ -56,7 +56,7 @@ Based [on](https://docs.technotim.live/posts/grafana-loki/) we want to aggregate
 
 For a single node deployment the referenced configuration should be suitable. But aggregating multiple applications, nodes and systems a deployment like [loki/getting-started](https://github.com/grafana/loki/tree/main/examples/getting-started) or [loki/production](https://github.com/grafana/loki/tree/main/production) should be considered.
 
-To integrate a _production_ suitable storage solution MinIO was integrated in this setup. Therefore, Loki's config was adjusted after this [guide](https://blog.min.io/how-to-grafana-loki-minio/).
+To integrate a _production_ suitable storage solution MinIO was integrated in this setup. Therefore, Loki's config was adjusted after this [guide](https://blog.min.io/how-to-grafana-loki-minio/) and this [template](https://github.com/grafana/loki/blob/main/examples/getting-started/loki-config.yaml).
 
 ### Changing the logging driver for a container
 
@@ -163,8 +163,31 @@ Pull and initialize the application stack:
 .\up.ps1
 ```
 
+Visit the user interfaces:
 
+- check the created buckets in [MinIO](http://localhost:9006)
+- monitor your running containers with [cAdvisor](http://localhost:8080)
+- verify all scraping targets are up and running [Prometheus UI](http://localhost:9090/targets)
+- visit [Grafana](http://localhost:3000)
 
+**TODO** 
+- add Datasources
+- add dashboards 
+    -  both can be achieved via provisioning !
+- documentation
+- prommtail config and prefect integration
+
+Shutdown the stack:
+
+```
+.\shutdown.ps1
+```
+
+Restart it:
+
+```
+.\startup.ps1
+```
 
 
 Bring stop all containers and delete them, as well as the created network.
@@ -172,5 +195,3 @@ Bring stop all containers and delete them, as well as the created network.
 ```
 .\down.ps1
 ```
-
-
