@@ -52,7 +52,7 @@ Both layers have their own compose files, but share the same bridge network `mon
 
 ## The Logging Stack
 
-Based [on](https://docs.technotim.live/posts/grafana-loki/) we want to aggregate the logs of our monitoring stack.
+To aggregate the logs of our monitoring stack we use Grafana's Loki. The configuration is inspired [by](https://docs.technotim.live/posts/grafana-loki/).
 
 For a single node deployment the referenced configuration should be suitable. But aggregating multiple applications, nodes and systems a deployment like [loki/getting-started](https://github.com/grafana/loki/tree/main/examples/getting-started) or [loki/production](https://github.com/grafana/loki/tree/main/production) should be considered.
 
