@@ -48,3 +48,9 @@ scrape_configs:
     static_configs:
     - targets:
       - grafana:3000
+  
+  - job_name: loki
+    scrape_interval: 10s 
+    static_configs:
+    - targets:
+      - loki:3100
