@@ -32,18 +32,7 @@ services:
     #   interval: 15s
     #   timeout: 20s
     #   retries: 5
-  # minmc:
-  #   image: minio/mc
-  #   depends_on:
-  #     - minio
-  #   entrypoint: >
-  #     /bin/sh -c "
-  #     /usr/bin/mc config host add myminio http://minio:9000 minioadmin minioadmin;
-  #     /usr/bin/mc rm -r --force myminio/loki;
-  #     /usr/bin/mc mb myminio/loki;
-  #     /usr/bin/mc policy set public myminio/loki;
-  #     exit 0;
-  #     "
+
   loki:
     image: grafana/loki:2.7.4
     volumes:
@@ -54,6 +43,8 @@ services:
     command: -config.file=/etc/loki/loki-config.yml
     depends_on:
       - minio
+    #!! don't use the plugin driver here - this prohibits stopping loki
+    # see https://github.com/grafana/loki/issues/2063 for a workaround
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest

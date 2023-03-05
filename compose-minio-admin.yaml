@@ -1,0 +1,25 @@
+version: "3.9"
+
+networks:
+  default:
+    name: monitoring-network
+
+volumes:
+  minio:
+
+services:
+  # mini
+  minmc:
+    image: minio/mc
+    # * bash entry
+    entrypoint: "bash"
+
+    # * client to setup minio see https://blog.min.io/how-to-grafana-loki-minio/
+    # entrypoint: >
+    #   /bin/sh -c "
+    #   /usr/bin/mc config host add myminio http://minio:9000 minioadmin minioadmin;
+    #   /usr/bin/mc rm -r --force myminio/loki;
+    #   /usr/bin/mc mb myminio/loki;
+    #   /usr/bin/mc policy set public myminio/loki;
+    #   exit 0;
+    #   "
