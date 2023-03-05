@@ -2,7 +2,6 @@ auth_enabled: false
 
 server:
   http_listen_port: 3100
-  log_level: info
 
 common:
   replication_factor: 1
