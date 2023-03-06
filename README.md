@@ -52,11 +52,17 @@ Both layers have their own compose files, but share the same bridge network `mon
 
 ## The Logging Stack
 
-To aggregate the logs of our monitoring stack we use Grafana's Loki. The configuration is inspired [by](https://docs.technotim.live/posts/grafana-loki/).
+To aggregate the logs of our monitoring stack we use Grafana's Loki. The initial configuration was inspired [by](https://docs.technotim.live/posts/grafana-loki/).
 
 For a single node deployment the referenced configuration should be suitable. But aggregating multiple applications, nodes and systems a deployment like [loki/getting-started](https://github.com/grafana/loki/tree/main/examples/getting-started) or [loki/production](https://github.com/grafana/loki/tree/main/production) should be considered.
 
-To integrate a _production_ suitable storage solution MinIO was integrated in this setup. Therefore, Loki's config was adjusted after this [guide](https://blog.min.io/how-to-grafana-loki-minio/) and this [template](https://github.com/grafana/loki/blob/main/examples/getting-started/loki-config.yaml).
+Therefore, the Grafana's [production template](), containing separate read and write instances, a nginx gateway and a MinIO storage instance, was utilized in this setup.
+
+### Sending logs with Promtail
+
+Using the recommended client to send logs, avoids configuration differences and generalizes the uses cases. Furthermore, a comparison with a custom implementation is possible 
+
+See this [gist](https://gist.github.com/ruanbekker/c6fa9bc6882e6f324b4319c5e3622460) and the associated [article](https://ruanbekker.medium.com/logging-with-docker-promtail-and-grafana-loki-d920fd790ca8) for information on scraping docker logs with Promtail.
 
 ### Changing the logging driver for a container
 
@@ -166,16 +172,11 @@ Pull and initialize the application stack:
 Visit the user interfaces:
 
 - check the created buckets in [MinIO](http://localhost:9006)
-- monitor your running containers with [cAdvisor](http://localhost:8080)
+- monitor your running containers with [cAdvisor](http://localhost:8081)
 - verify all scraping targets are up and running [Prometheus UI](http://localhost:9090/targets)
 - visit [Grafana](http://localhost:3000)
 
-**TODO** 
-- add Datasources
-- add dashboards 
-    -  both can be achieved via provisioning !
-- documentation
-- prommtail config and prefect integration
+
 
 Shutdown the stack:
 
@@ -183,14 +184,13 @@ Shutdown the stack:
 .\shutdown.ps1
 ```
 
-Restart it:
+Restart the setup:
 
 ```
 .\startup.ps1
 ```
 
-
-Bring stop all containers and delete them, as well as the created network.
+Bring all containers down, make sure they are stopped and remove them  as well as the created bridge network afterwards.
 
 ```
 .\down.ps1
