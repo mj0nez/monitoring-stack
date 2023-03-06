@@ -17,6 +17,7 @@ services:
   grafana:
     # image: grafana/grafana-oss:latest
     image: grafana-custom
+    container_name: grafana
     environment:
       - GF_DATABASE_TYPE=postgres
       - GF_DATABASE_HOST=grafana-db:5432
@@ -30,14 +31,13 @@ services:
       - grafana-storage:/var/lib/grafana
     depends_on:
       - grafana-db
-    logging:
-      driver: loki
-      options:
-        loki-url: "http://localhost:3100/loki/api/v1/push"
-        loki-batch-size: "400"
+    labels:
+      logging: "promtail"
+      logging_jobname: "containerlogs"
 
   grafana-db:
     image: postgres:15.1-alpine
+    container_name: grafana-db
     restart: unless-stopped
     environment:
       - POSTGRES_USER=grafana
@@ -47,22 +47,19 @@ services:
       - 5433:5432
     volumes: 
       - grafana-postgres:/var/lib/postgresql/data
-    logging:
-      driver: loki
-      options:
-        loki-url: "http://localhost:3100/loki/api/v1/push"
-        loki-batch-size: "400"
+    labels:
+      logging: "promtail"
+      logging_jobname: "containerlogs"
 
   timescaledb:
     image: timescale/timescaledb:latest-pg15
+    container_name: timescaledb
     environment:
       - POSTGRES_PASSWORD=password    # required, otherwise timescale disable password check for all dbs 
     ports:
       - 5431:5432
     volumes: 
       - timescale:/home/postgres/pgdata/data
-    logging:
-      driver: loki
-      options:
-        loki-url: "http://localhost:3100/loki/api/v1/push"
-        loki-batch-size: "400"
+    labels:
+      logging: "promtail"
+      logging_jobname: "containerlogs"

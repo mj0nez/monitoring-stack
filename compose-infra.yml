@@ -10,6 +10,7 @@ volumes:
 services:
   minio:
     image: minio/minio
+    container_name: minio
     entrypoint:
       - sh
       - -euc
@@ -32,9 +33,13 @@ services:
     #   interval: 15s
     #   timeout: 20s
     #   retries: 5
+    labels:
+      logging: "promtail"
+      logging_jobname: "containerlogs"
 
   loki:
     image: grafana/loki:2.7.4
+    container_name: loki
     volumes:
       - ./loki:/etc/loki
     ports:
@@ -48,6 +53,7 @@ services:
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
     ports:
     - 8080:8080
     volumes:
@@ -55,10 +61,14 @@ services:
     - /var/run:/var/run:rw
     - /sys:/sys:ro
     - /var/lib/docker/:/var/lib/docker:ro
+    labels:
+      logging: "promtail"
+      logging_jobname: "containerlogs"
 
 
   prometheus:
     image: prom/prometheus
+    container_name: prometheus
     volumes:
     - ./prometheus/prometheus-config.yml:/etc/prometheus/prometheus.yml:ro
     command:
@@ -69,21 +79,25 @@ services:
     ports:
       - "9090:9090"
     restart: unless-stopped
-    logging:
-      driver: loki
-      options:
-        loki-url: "http://localhost:3100/loki/api/v1/push"
-        loki-batch-size: "400"
+    labels:
+      logging: "promtail"
+      logging_jobname: "containerlogs"
 
-  ## in the current setup promtail has no task 
-  ## additionaly it fails because the by the config defined path does not exist
-  #
-  # promtail:
-  #   image: grafana/promtail:2.7.4
-  #   volumes:
-  #     - /var/log:/var/log
-  #     - ./promtail:/etc/promtail
-  #   # ports:
-  #   #   - "1514:1514" # this is only needed if you are going to send syslogs
-  #   restart: unless-stopped
-  #   command: -config.file=/etc/promtail/promtail-config.yml
+  # additionaly it fails because the by the config defined path does not exist
+  
+  promtail:
+    image: grafana/promtail:2.7.4
+    container_name: promtail
+    volumes:
+      - ./promtail_logs:/var/log
+      - ./promtail:/etc/promtail
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: -config.file=/etc/promtail/promtail-config.yml
+    depends_on:
+      - loki
+    restart: unless-stopped
+    labels:
+      logging: "promtail"
+      logging_jobname: "containerlogs"
+    
