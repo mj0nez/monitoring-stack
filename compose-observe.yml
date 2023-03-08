@@ -15,7 +15,7 @@ networks:
 
 services:
   grafana:
-    # image: grafana/grafana-oss:latest
+    # image: grafana/grafana-oss:9.4.3
     image: grafana-custom:9.4.3
     container_name: grafana
     environment:
@@ -29,6 +29,7 @@ services:
       - 3000:3000
     volumes:
       - grafana-storage:/var/lib/grafana
+      - ./grafana/conf.ini:/etc/grafana/grafana.ini
     depends_on:
       - grafana-db
     labels:

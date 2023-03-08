@@ -193,6 +193,12 @@ Restart the setup:
 
 Bring all containers down, make sure they are stopped and remove them  as well as the created bridge network afterwards.
 
+
+setup the data sources in grafana:
+
+pay attention to the auth of loki:
+custom header key: "X-Scope-OrgID" val:1  see: https://github.com/grafana/loki/blob/main/production/docker/config/datasources.yaml
+
 ```
 .\down.ps1
 ```
