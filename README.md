@@ -25,13 +25,14 @@ This proof of concept aims to analyze the options and requirements to monitor di
 
 ### Architecture
 
-The applications are separated into two layers:
+The applications are separated into three layers:
 
 1. infrastructure
     - Storage
-    - Metric collection
     - Log aggregation
-2. observability
+2. metrics
+    - Metric/log collection
+3. observability
     - Visualization
     - TimeSeries Database (for custom metrics)
 
