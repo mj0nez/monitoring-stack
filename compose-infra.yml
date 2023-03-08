@@ -61,7 +61,7 @@ services:
       - "8080:80"
       - "3100"
     depends_on:
-    - loki-read
+      - loki-read
 
   loki-read:
     image: grafana/loki:2.7.4
@@ -112,12 +112,16 @@ services:
     image: gcr.io/cadvisor/cadvisor:latest
     container_name: cadvisor
     ports:
-    - 8081:8080
+      - 8081:8080
+    # :ro  - read only flag
+    # :rw  - read write flag
+    # If neither 'rw' or 'ro' is specified then the volume is mounted in read-write mode.
+    # see https://stackoverflow.com/questions/53769125/what-does-rw-mean-when-bind-mounting-a-directory
     volumes:
-    - /:/rootfs:ro
-    - /var/run:/var/run:rw
-    - /sys:/sys:ro
-    - /var/lib/docker/:/var/lib/docker:ro
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
     labels:
       logging: "promtail"
       logging_jobname: "containerlogs"
@@ -127,12 +131,12 @@ services:
     image: prom/prometheus
     container_name: prometheus
     volumes:
-    - ./prometheus/prometheus-config.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus/prometheus-config.yml:/etc/prometheus/prometheus.yml:ro
     command:
-    - --config.file=/etc/prometheus/prometheus.yml
+      - --config.file=/etc/prometheus/prometheus.yml
     depends_on:
-    - cadvisor
-    - loki-read
+      - cadvisor
+      - loki-read
     ports:
       - "9090:9090"
     restart: unless-stopped
@@ -140,8 +144,6 @@ services:
       logging: "promtail"
       logging_jobname: "containerlogs"
 
-  # additionaly it fails because the by the config defined path does not exist
-  
   promtail:
     image: grafana/promtail:2.7.4
     container_name: promtail
