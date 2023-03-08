@@ -16,7 +16,7 @@ networks:
 services:
   grafana:
     # image: grafana/grafana-oss:latest
-    image: grafana-custom
+    image: grafana-custom:9.4.3
     container_name: grafana
     environment:
       - GF_DATABASE_TYPE=postgres
