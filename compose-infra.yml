@@ -62,6 +62,10 @@ services:
       - "3100"
     depends_on:
       - loki-read
+      - loki-write
+    labels:
+      logging: "promtail"
+      logging_jobname: "containerlogs"
 
   loki-read:
     image: grafana/loki:2.7.4
@@ -84,7 +88,7 @@ services:
     #   mode: replicated
     #   replicas: 3
     depends_on:
-    - loki-write
+      - minio
 
   loki-write:
     image: grafana/loki:2.7.4
@@ -136,7 +140,7 @@ services:
       - --config.file=/etc/prometheus/prometheus.yml
     depends_on:
       - cadvisor
-      - loki-read
+      - loki-gateway
     ports:
       - "9090:9090"
     restart: unless-stopped
