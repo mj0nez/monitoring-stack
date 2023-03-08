@@ -25,6 +25,8 @@ services:
       - GF_DATABASE_USER=grafana
       - GF_DATABASE_PASSWORD=postgres
       - GF_DATABASE_SSL_MODE=disable
+      # - GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS= grafana-oncall-app # necessary?
+      # - GF_INSTALL_PLUGINS=grafana-oncall-app
     ports:
       - 3000:3000
     volumes:
