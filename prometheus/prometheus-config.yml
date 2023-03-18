@@ -10,7 +10,7 @@ global:
       monitor: 'codelab-monitor'
 
 # Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
-rule_files:
+# rule_files:
   # - "first.rules"
   # - "second.rules"
 
@@ -75,16 +75,7 @@ scrape_configs:
         type: A
         port: 3100
 
-  # exposing loki via nginx exposes it's metrics combined with nginx's
-  # therefore we waive this job except for now
-
-  # - job_name: nginx
-  #   scrape_interval: 30s 
-  #   static_configs:
-  #   - targets:
-  #     - loki-gateway:80
-
-  - job_name: demo/mimir
+  - job_name: mimir
     static_configs:
       - targets: [ 'mimir-1:8080' ]
         labels:
