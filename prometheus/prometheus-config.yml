@@ -86,6 +86,14 @@ scrape_configs:
       # - targets: [ 'mimir-3:8080' ]
       #   labels:
       #     pod: 'mimir-3'
+  
+  - job_name: minio-mimir
+    metrics_path: /minio/v2/metrics/cluster
+    scrape_interval: 30s 
+    scheme: http
+    static_configs:
+    - targets:
+      - minio-mimir:9000
 
 remote_write:
   - url: http://load-balancer:9009/api/v1/push
