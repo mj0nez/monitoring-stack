@@ -26,7 +26,7 @@ x-environment: &oncall-environment
 services:
   engine:
     image: grafana/oncall
-    restart: always
+    restart: unless-stopped
     ports:
       - "8082:8080"
     command: >
@@ -42,7 +42,7 @@ services:
 
   celery:
     image: grafana/oncall
-    restart: always
+    restart: unless-stopped
     command: sh -c "./celery_with_exporter.sh"
     environment: *oncall-environment
     volumes:
@@ -65,7 +65,7 @@ services:
 
   redis:
     image: redis:7.0.5
-    restart: always
+    restart: unless-stopped
     expose:
       - 6379
     volumes:
