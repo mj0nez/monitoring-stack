@@ -12,7 +12,7 @@ This proof of concept aims to analyze the options and requirements to monitor di
 
 - Docker
 - Docker compose v2
-- [Grafana Loki's Docker plugin](https://grafana.com/docs/loki/latest/clients/docker-driver/#docker-driver-client)
+- [Grafana Loki's Docker plugin](https://grafana.com/docs/loki/latest/clients/docker-driver/#docker-driver-client) - if need be
 - this repository
 
 ### Components
@@ -22,6 +22,14 @@ This proof of concept aims to analyze the options and requirements to monitor di
 - [Grafana](https://grafana.com/grafana/) - a visualization and observability platform
 - [MinIO](https://min.io/) - s3 compatible object storage
 - [cAdvisor](https://github.com/google/cadvisor) - resource and performance characteristics of running containers
+
+### Planned/started extensions
+
+- [Mimir](https://grafana.com/oss/mimir/) - long term storage for Prometheus
+  - successfully integrated: [compose-mimir.yml](./compose-mimir.yml)
+- [OnCall](https://grafana.com/oss/oncall/) - easy-to-use on-call management tool
+  - successfully integrated [compose-oncall.yml](./compose-mimir.yml)
+  - use case pending
 
 ### Architecture
 
@@ -36,7 +44,7 @@ The applications are separated into three layers:
     - Visualization
     - TimeSeries Database (for custom metrics)
 
-Both layers have their own compose files, but share the same bridge network `monitoring-network`. To pass configuration files, some components have their own directory, containing a config file.
+Every layer has it's own compose files, but all of them share the same bridge network `monitoring-network`. To pass configuration files, some components have their own directory, containing a config file e.g.:
 
 ```tree
 .
@@ -175,7 +183,7 @@ Visit the user interfaces:
 - check the created buckets in [MinIO](http://localhost:9006)
 - monitor your running containers with [cAdvisor](http://localhost:8081)
 - verify all scraping targets are up and running [Prometheus UI](http://localhost:9090/targets)
-- visit [Grafana](http://localhost:3000)
+- visit [Grafana](http://localhost:3000) login with default credentials: username ``admin`` password ``admin``
 
 
 
