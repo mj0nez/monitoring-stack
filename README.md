@@ -28,7 +28,7 @@ This proof of concept aims to analyze the options and requirements to monitor di
 - [Mimir](https://grafana.com/oss/mimir/) - long term storage for Prometheus
   - successfully integrated: [compose-mimir.yml](./compose-mimir.yml)
 - [OnCall](https://grafana.com/oss/oncall/) - easy-to-use on-call management tool
-  - successfully integrated [compose-oncall.yml](./compose-mimir.yml)
+  - successfully integrated [compose-oncall.yml](./compose-oncall.yml)
   - use case pending
 
 ### Architecture
