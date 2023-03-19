@@ -74,15 +74,3 @@ scrape_configs:
           - loki-write
         type: A
         port: 3100
-
-  - job_name: mimir
-    static_configs:
-      - targets: [ 'mimir-1:8080' ]
-        labels:
-          pod: 'mimir-1'
-      - targets: [ 'mimir-2:8080' ]
-        labels:
-          pod: 'mimir-2'
-      # - targets: [ 'mimir-3:8080' ]
-      #   labels:
-      #     pod: 'mimir-3'
