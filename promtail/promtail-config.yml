@@ -29,12 +29,18 @@ scrape_configs:
         target_label: 'job'
   
   - job_name: kidip_logs
+    pipeline_stages:
+      - regex:
+          expression: '(?P<ts>[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z)'
+      - timestamp:
+          source: ts
+          format: RFC3339      #https://github.com/jafernandez73/grafana-loki/blob/master/docs/logentry/processing-log-lines.md#match
     static_configs:
-    - targets:
-        - localhost
-      labels:
-        job: kidip
-        __path__: /var/log/*log
+      - targets:
+          - localhost
+        labels:
+          job: kidip
+          __path__: /var/log/*log
   
 
 ## local machine logs
