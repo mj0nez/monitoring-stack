@@ -70,7 +70,7 @@ limits_config:
   max_cache_freshness_per_query: '10m'
   enforce_metric_name: false
   reject_old_samples: true
-  reject_old_samples_max_age: 30m # ? maybe adjust this
+  reject_old_samples_max_age: 365d # ? maybe adjust this
   # see
   # loki-gateway:80 msg="final error sending batch" status=400 error="server returned HTTP status 400 Bad Request (400): entry for stream '{container=\"timescaledb\", job=\"containerlogs\", logstream=\"stderr\"}' has timestamp too old: 2023-03-06T02:22:11Z, oldest acceptable timestamp is: 2023-03-06T10:26:58Z"
   ingestion_rate_mb: 10
