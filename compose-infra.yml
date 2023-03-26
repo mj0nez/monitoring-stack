@@ -50,9 +50,9 @@ services:
     depends_on:
       - loki-read
       - loki-write
-    labels:
-      logging: "promtail"
-      logging_jobname: "containerlogs"
+    # labels:
+    #   logging: "promtail"
+    #   logging_jobname: "containerlogs"
 
   loki-read:
     image: grafana/loki:2.7.4
