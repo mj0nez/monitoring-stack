@@ -28,28 +28,67 @@ scrape_configs:
       - source_labels: ['__meta_docker_container_label_logging_jobname']
         target_label: 'job'
   
+  # # old config
+  # - job_name: app_logs
+  #   pipeline_stages:
+  #     - regex:
+  #         expression: '(?P<ts>^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z)\|-\|.*\|(?P<service>\S+)\|\*\|0\|(?P<level>[a-z]{3})\|Y\|(?P<message>.+)$' # works kinda
+  #         # expression: '(?P<ts>^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z)\|-\|(?P<message>.+)$'
+  #     - timestamp:
+  #         source: ts
+  #         format: RFC3339      #https://github.com/jafernandez73/grafana-loki/blob/master/docs/logentry/processing-log-lines.md#match
+  #     - match:
+  #         selector: '{job="app_logs"} |~ ".*TO_DFB.*"'
+  #         action: keep
+  #         stages:
+  #           - regex:
+  #               expression: 'TO_DFB\.(?P<commodity>.+)\.(?P<data>.+)'
+  #               source: service
+  #           - labels:
+  #               commodity:
+  #               data:
+  #           - static_labels:
+  #               service: TO_DFB
+  #     - labels:
+  #         level: level
+  #     # - replace:
+  #     #     expression: 'msg'
+  #     #     source:     level
+  #     #     replace: 'info'
+  #     - output:
+  #         source: message
+  #   static_configs:
+  #     - targets:
+  #         - localhost
+  #       labels:
+  #         job: app_logs
+  #         app: AppName
+  #         server: 'my.server.domain.net'
+  #         __path__: /var/log/*log
+
+    # reduced labels
   - job_name: app_logs
     pipeline_stages:
       - regex:
-          expression: '(?P<ts>^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z)\|-\|.*\|(?P<service>\S+)\|\*\|0\|(?P<level>[a-z]{3})\|Y\|(?P<message>.+)$' # works kinda
-          # expression: '(?P<ts>^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z)\|-\|(?P<message>.+)$'
+          # expression: '(?P<ts>^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z)\|-\|.*\|(?P<service>\S+)\|\*\|0\|(?P<level>[a-z]{3})\|Y\|(?P<message>.+)$' # works kinda
+          expression: '(?P<ts>^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z)\|-\|(?P<message>.+)$'
       - timestamp:
           source: ts
           format: RFC3339      #https://github.com/jafernandez73/grafana-loki/blob/master/docs/logentry/processing-log-lines.md#match
-      - match:
-          selector: '{job="app_logs"} |~ ".*TO_DFB.*"'
-          action: keep
-          stages:
-            - regex:
-                expression: 'TO_DFB\.(?P<commodity>.+)\.(?P<data>.+)'
-                source: service
-            - labels:
-                commodity:
-                data:
-            - static_labels:
-                service: TO_DFB
-      - labels:
-          level: level
+      # - match:
+      #     selector: '{job="app_logs"} |~ ".*TO_DFB.*"'
+      #     action: keep
+      #     stages:
+      #       - regex:
+      #           expression: 'TO_DFB\.(?P<commodity>.+)\.(?P<data>.+)'
+      #           source: service
+      #       - labels:
+      #           commodity:
+      #           data:
+      #       - static_labels:
+      #           service: TO_DFB
+      # - labels:
+      #     level: level
       # - replace:
       #     expression: 'msg'
       #     source:     level
@@ -61,8 +100,8 @@ scrape_configs:
           - localhost
         labels:
           job: app_logs
-          app: AppName
-          server: 'my.server.domain.net'
+          # app: AppName
+          # server: 'my.server.domain.net'
           __path__: /var/log/*log
   
 ## local machine logs
