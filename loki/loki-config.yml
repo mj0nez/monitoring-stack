@@ -42,13 +42,13 @@ ingester:
       kvstore:
         store: memberlist
     final_sleep: 0s
-  chunk_idle_period: 1m
   wal:
     enabled: true
     dir: /loki/wal
-  max_chunk_age: 8760h
-  chunk_retain_period: 30s
+  max_chunk_age: 10m
   chunk_encoding: snappy
+  chunk_idle_period: 10m
+  chunk_retain_period: 5m
   chunk_target_size: 1.572864e+06
   chunk_block_size: 262144
   flush_op_timeout: 10s
@@ -65,9 +65,9 @@ schema_config:
 
 storage_config:
   boltdb_shipper:
+    active_index_directory: /loki/index
+    cache_location: /loki/index_cache
     shared_store: s3
-    active_index_directory: /tmp/index
-    cache_location: /tmp/boltdb-cache
 
 
 limits_config:
