@@ -39,7 +39,7 @@ services:
       logging_jobname: "containerlogs"
 
   grafana-db:
-    image: postgres:15.3-alpine
+    image: postgres:15.4-alpine
     container_name: grafana-db
     restart: unless-stopped
     environment:
