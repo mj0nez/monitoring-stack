@@ -15,7 +15,7 @@ networks:
 
 services:
   grafana:
-    image: grafana/grafana-oss:9.4.3    # open source
+    image: grafana/grafana-oss:10.0.3    # open source
     # image: grafana-custom:9.4.3       # customized image
     container_name: grafana
     environment:
@@ -39,7 +39,7 @@ services:
       logging_jobname: "containerlogs"
 
   grafana-db:
-    image: postgres:15.1-alpine
+    image: postgres:15.4-alpine
     container_name: grafana-db
     restart: unless-stopped
     environment:

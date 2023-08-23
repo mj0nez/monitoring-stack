@@ -55,7 +55,7 @@ services:
     #   logging_jobname: "containerlogs"
 
   loki-read:
-    image: grafana/loki:2.7.4
+    image: grafana/loki:2.8.4
     container_name: loki-read
     volumes:
       - ./loki:/etc/loki/
@@ -78,7 +78,7 @@ services:
       - minio
 
   loki-write:
-    image: grafana/loki:2.7.4
+    image: grafana/loki:2.8.4
     container_name: loki-write
     volumes:
       - ./loki:/etc/loki/
