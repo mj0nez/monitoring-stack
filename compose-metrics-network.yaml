@@ -1,0 +1,30 @@
+version: "3.9"
+
+
+networks:
+  default:
+    name: monitoring-network
+
+
+services:
+
+  blackbox:
+    image: prom/blackbox-exporter:latest
+    volumes:
+      - ./blackbox/blackbox-config.yml:/etc/blackbox_exporter/config.yml
+      - ./client_ssl_combined.pem:/etc/secrets/client_ssl_combined.pem:ro
+    ports:
+      - '9115:9115'
+    restart: unless-stopped
+
+  prometheus-network:
+    image: prom/prometheus
+    container_name: prometheus-network
+    volumes:
+      - ./prometheus/prometheus-config-blackbox.yml:/etc/prometheus/prometheus.yml:ro
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    ports:
+      - "9099:9090"
+    restart: unless-stopped
+

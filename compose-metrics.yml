@@ -36,8 +36,8 @@ services:
       - prometheus-data:/prometheus
     command:
       - --config.file=/etc/prometheus/prometheus.yml
-    depends_on:
-      - cadvisor
+    # depends_on:
+    #   - cadvisor
       # - loki-gateway
     ports:
       - "9090:9090"
