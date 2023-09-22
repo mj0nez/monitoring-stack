@@ -1,7 +1,7 @@
 # Grafana recommends an alpine based image.
 # Reference for updating the CA-certificates of an alpine image see https://stackoverflow.com/q/67231714
 
-FROM grafana/grafana-oss:10.1.0
+FROM grafana/grafana-oss:10.1.2
 
 # grafana has a custom user, to update the certificates we need higher privileges
 USER root
