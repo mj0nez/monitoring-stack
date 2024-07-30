@@ -64,7 +64,7 @@ services:
         condition: service_healthy
 
   redis:
-    image: redis:7.2.1
+    image: redis:7.4.0
     restart: unless-stopped
     expose:
       - 6379
