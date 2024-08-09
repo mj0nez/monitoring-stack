@@ -48,7 +48,7 @@ services:
 
 
   promtail:
-    image: grafana/promtail:2.9.1
+    image: grafana/promtail:2.9.10
     container_name: promtail
     volumes:
       - ./promtail_logs:/var/log
